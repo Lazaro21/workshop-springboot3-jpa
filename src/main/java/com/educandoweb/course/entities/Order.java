@@ -12,6 +12,7 @@ import java.util.Set;
 @Entity
 @Table(name = "tb_order")
 public class Order implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,9 +23,11 @@ public class Order implements Serializable {
     @ManyToOne
     @JoinColumn(name = "client_id")
     private User client;
-
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    private Payment payment;
     @OneToMany(mappedBy = "id.order")
     private Set<OrderItem> items = new HashSet<>();
+
 
     public User getClient() {
         return client;
@@ -69,6 +72,14 @@ public class Order implements Serializable {
         if (orderStatus != null) {
             this.orderStatus = orderStatus.getCode();
         }
+    }
+
+    public Payment getPayment() {
+        return payment;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
     }
 
     public Set<OrderItem> getItems() {
